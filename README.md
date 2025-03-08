@@ -69,8 +69,8 @@ Errors are returned in the following format:
 
 ```json
 {
-    "status":  ${responseCode},
-    "message":  ${whyHasItHappened}
+    "status":  "responseCode",
+    "message":  "whyHasItHappened"
 }
 ```
 

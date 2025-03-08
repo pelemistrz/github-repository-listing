@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class GitHubService {
 
+    @ConfigProperty(name="github.token")
+    String token;
+
     @Inject
     @RestClient
     GitHubClient gitHubClient;
@@ -27,8 +31,8 @@ public class GitHubService {
     public Uni<List<GitHubRepo>> getRepositories(String user) {
 
         return Uni.createFrom().item(() -> {
-            List<GitHubRepoDTO> repos = gitHubClient.getUserRepositories(user);
-            log.info("Got repositories: {}", repos);
+            List<GitHubRepoDTO> repos = gitHubClient.getUserRepositories(user, "Bearer " + token);
+
             if (repos.isEmpty()) {
                 throw new IllegalArgumentException("User not found");
             }
@@ -38,7 +42,7 @@ public class GitHubService {
 
                         GitHubRepo gitHubRepo = new GitHubRepo(repo.getName(), repo.getOwner().getLogin());
 
-                        List<Branch> branches = gitHubClient.getBranches(repo.getOwner().getLogin(), repo.getName())
+                        List<Branch> branches = gitHubClient.getBranches(repo.getOwner().getLogin(), repo.getName(),"Bearer "+token)
                                 .stream()
                                 .map(branch -> {
                                     Branch b = new Branch(branch.getName(), branch.getCommit().getSha());
