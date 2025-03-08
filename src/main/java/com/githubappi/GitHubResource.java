@@ -24,6 +24,8 @@ public class GitHubResource {
     public Uni<Response> getRepositories(@PathParam("user") String user) {
         return gitHubService.getRepositories(user)
                 .onItem().transform(repos -> Response.ok(repos).build()) // Happy path
+
+
                 .onFailure(IllegalArgumentException.class).recoverWithItem(() ->
                         Response.status(Response.Status.NOT_FOUND)
                                 .entity(new Error404(404, "User not found"))
