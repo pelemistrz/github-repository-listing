@@ -1,18 +1,15 @@
 package com.githubappi.dto;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-
 public class GitHubRepoDTO {
-    public String name;
-    public boolean isFork;
-    public Owner owner;
+    private String name;
+    private boolean isFork;
+    private OwnerDTO owner;
 
     @Override
     public String toString() {
