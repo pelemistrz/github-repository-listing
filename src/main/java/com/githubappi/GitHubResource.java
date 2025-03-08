@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 
 
 @Blocking
-@Path("/api/github/repos")
+@Path("/api/v1/repos")
 @Produces(MediaType.APPLICATION_JSON)
 public class GitHubResource {
 

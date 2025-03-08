@@ -1,67 +1,92 @@
-# github
+# GitHub Repository API Service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project provides an API service to list GitHub repositories of a user
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Overview
 
-## Running the application in dev mode
+The main functionality of the application is to list all repositories of a given GitHub username which are not forked. The API provides:
 
-You can run your application in dev mode that enables live coding using:
+- Repository Name
+- Owner Login
+- For each branch: its name and the last commit SHA
 
-```shell script
-./mvnw quarkus:dev
+It handles specific error 404 when GitHub user doesn't exist
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Components](#components)
+- [Error Handling](#error-handling)
+- [Testing](#testing)
+- [License](#license)
+
+## Getting Started
+
+### Prerequisites
+
+- Java 21
+- Quarkus 3
+- Maven (for building and running)
+
+### Usage
+To fetch repositories for a specific GitHub user:
+```bash
+GET /api/v1/repos/{username}
+Accept: application/json
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Replace `{username}` with the desired GitHub username.
 
-## Packaging and running the application
+## **Components**
 
-The application can be packaged using:
+### Resources
 
-```shell script
-./mvnw package
+- `GitHubResource`: The main resource handling incoming HTTP requests.
+
+### Services
+
+- `GitHubService`: Responsible for fetching data from the GitHub API.
+
+
+### Models
+
+- `Branch`: Represents a branch in a GitHub repository.
+- `GitHubRepo`: Represents a GitHubRepository.
+### DTO
+- `CommitDTO`: Represents a commit in a GitHub repository.
+- `OwnerDTO`: Represents the owner of a GitHub repository.
+- `GitHubRepoDTO`: Represents detailed information about a repository.
+- `GitHubBranchDTO`: Represents a GitHub branch.
+
+### Exceptions
+
+- `Error404`: Thrown when a specified GitHub user is not found.
+
+## **Error Handling**
+
+Errors are returned in the following format:
+
+```json
+{
+    "status":  ${responseCode},
+    "message":  ${whyHasItHappened}
+}
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+For example, when a user tries to fetch data for a non-existent GitHub user:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+```json
+{
+  "status": 404,
+  "Message": "User not found"
+}
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+### Testing
 
-## Creating a native executable
+The application includes integration tests to validate its functionality against the acceptance criteria - happy path for existing GitHub user.
+### License
 
-You can create a native executable using:
+This project is open-source. Feel free to fork, modify, and use as needed. Before using for commercial purposes, it's recommended to review any licensing constraints.
 
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/github-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- Mutiny ([guide](https://quarkus.io/guides/mutiny-primer)): Write reactive applications with the modern Reactive
-  Programming library Mutiny
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and
-  Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on
-  it.
-- REST JSON-B ([guide](https://quarkus.io/guides/rest#json-serialisation)): JSON-B serialization support for Quarkus
-  REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on
-  it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus
-  REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
