@@ -41,9 +41,6 @@ GET /api/v1/repos/{username}
 #### Path Parameters:
 - **`{username}`**: The GitHub username for which repositories should be fetched.
 
-
-Replace `{username}` with the desired GitHub username.
-
 ## **Components**
 
 ### Resources
