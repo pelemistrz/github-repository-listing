@@ -30,11 +30,17 @@ It handles specific error 404 when GitHub user doesn't exist
 - Maven (for building and running)
 
 ### Usage
-To fetch repositories for a specific GitHub user:
+To fetch repositories for a specific GitHub user, make a GET request to the following endpoint:
 ```bash
 GET /api/v1/repos/{username}
-Accept: application/json
 ```
+#### Headers:
+- **Accept**: `application/json`  
+  Specifies that the response should be in JSON format.
+
+#### Path Parameters:
+- **`{username}`**: The GitHub username for which repositories should be fetched.
+
 
 Replace `{username}` with the desired GitHub username.
 
