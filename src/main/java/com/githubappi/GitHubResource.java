@@ -23,8 +23,7 @@ public class GitHubResource {
     @Path("/{user}")
     public Uni<Response> getRepositories(@PathParam("user") String user) {
         return gitHubService.getRepositories(user)
-                .onItem().transform(repos -> Response.ok(repos).build()) // Happy path
-
+                .onItem().transform(repos -> Response.ok(repos).build())
 
                 .onFailure(IllegalArgumentException.class).recoverWithItem(() ->
                         Response.status(Response.Status.NOT_FOUND)
